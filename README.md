@@ -1,25 +1,25 @@
-# DAB React Demo 🚀
+# DAB React Demo 
 
 A modern React application demonstrating product and category management with a RESTful API backend.
 
-## 🔧 About DAB Base
+##  About DAB Base
 
-DAB Base ([repository](https://github.com/Dab-Development-Team/dab-base)) is the backbone of this application, providing a robust and scalable backend infrastructure:
+DAB Base ([repository](https://github.com/vvidov/DabRestGraphQLBaseDemo)) is the backbone of this application, providing a robust and scalable backend infrastructure:
 
-### What is DAB Base? 🤔
+### What is DAB Base? 
 - A containerized backend service built with .NET and SQL Server
 - Provides a RESTful API for managing products and categories
 - Implements the Northwind database schema with modern improvements
 - Runs in Docker for easy deployment and development
 
-### Why DAB Base? 💡
+### Why DAB Base? 
 - **Development Speed**: Pre-configured database and API endpoints
 - **Standardization**: Follows REST best practices and modern API design
 - **Reliability**: Built on proven technologies (.NET, SQL Server)
 - **Scalability**: Containerized architecture for easy scaling
 - **Testing**: Provides a consistent environment for integration testing
 
-### How it Works 🔄
+### How it Works 
 1. **Docker Containers**:
    - SQL Server container for data storage
    - .NET API container for business logic and routing
@@ -35,48 +35,48 @@ DAB Base ([repository](https://github.com/Dab-Development-Team/dab-base)) is the
    - Optimized for modern applications
    - Includes sample data for testing
 
-## ✨ Features
+##  Features
 
-- **Category Management** 📁
+- **Category Management** 
   - Create, read, update, and delete product categories
   - Hierarchical organization of products
   - Real-time category updates
 
-- **Product Management** 📦
+- **Product Management** 
   - Full CRUD operations for products
   - Product categorization
   - Price and inventory tracking
   - Bulk operations support
 
-- **Modern UI/UX** 🎨
+- **Modern UI/UX** 
   - Responsive design
   - Clean and intuitive interface
   - Real-time updates
   - Error handling and user feedback
 
-## 🛠️ Technical Stack
+##  Technical Stack
 
-### Frontend 🌐
+### Frontend 
 - React 18+
 - TypeScript
 - Axios for API communication
 - Modern React hooks and patterns
 - Jest for testing
 
-### Backend (DAB Base) 🖥️
-- .NET 6+ Web API
+### Backend (DAB Base) 
+- .NET 8 Web API
 - SQL Server 2019
 - Entity Framework Core
 - Docker containerization
 
-### API Integration 🔌
+### API Integration 
 - RESTful API endpoints
 - JSON response format
 - Comprehensive error handling
 - Request/response validation
 - Swagger/OpenAPI documentation
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 client/
@@ -92,7 +92,7 @@ client/
 └── package.json        # Project dependencies
 ```
 
-## 🔗 API Endpoints
+##  API Endpoints
 
 ### Categories
 - `GET /api/categories` - List all categories
@@ -106,17 +106,17 @@ client/
 - `PATCH /api/products/ProductID/:id` - Update a product
 - `DELETE /api/products/ProductID/:id` - Delete a product
 
-## 🧪 Testing
+##  Testing
 
 The project includes comprehensive integration tests for both the category and product APIs:
 
-### Category Tests 📁
+### Category Tests 
 - Category lifecycle (create, read, update, delete)
 - Input validation
 - Error handling
 - Edge cases
 
-### Product Tests 📦
+### Product Tests 
 - Product lifecycle management
 - Category association
 - Data validation
@@ -133,30 +133,30 @@ cd client
 npm test
 ```
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 
 - Node.js 14+ and npm
-- Docker for running [dab-base](https://github.com/Dab-Development-Team/dab-base)
+- Docker for running [dab-base](https://github.com/vvidov/DabRestGraphQLBaseDemo)
 - Git
 
 ### Setup Steps
 
-1. Clone the repositories:
+1. Clone and setup the repository:
 ```bash
-# Clone the React frontend
+# Clone the React frontend with submodules
 git clone https://github.com/vvidov/dabBaseReactDemo.git
 cd dabBaseReactDemo
 
-# Clone dab-base for the backend
-git clone https://github.com/Dab-Development-Team/dab-base.git
-cd dab-base
+# Initialize and update the dab-base submodule
+git submodule init
+git submodule update
 ```
 
 2. Start the backend:
 ```bash
-cd dab-base
+cd DabRestGraphQLBaseDemo
 docker-compose up -d
 ```
 
@@ -195,52 +195,66 @@ npm test
 
 ### Troubleshooting
 
-- If the API is not accessible, ensure dab-base containers are running:
+First, ensure you're in the DabRestGraphQLBaseDemo directory:
+```bash
+cd DabRestGraphQLBaseDemo
+```
+
+Then you can:
+
+- Check if containers are running:
   ```bash
   docker ps
   ```
 
-- Check dab-base logs for errors:
+- If the backend directory is empty, ensure submodules are properly initialized:
   ```bash
-  cd dab-base
+  git submodule init
+  git submodule update
+  ```
+
+- Check container logs for errors:
+  ```bash
   docker-compose logs
   ```
 
 - Verify environment variables:
   ```bash
-  cat client/.env
+  cd ../client
+  cat .env
   ```
 
 - Clear Docker cache if needed:
   ```bash
+  cd ../DabRestGraphQLBaseDemo
   docker-compose down
   docker-compose build --no-cache
   docker-compose up -d
   ```
 
-## 📝 Development Guidelines
+##  Development Guidelines
 
-### Code Style ⚡
+### Code Style 
 - Use TypeScript for type safety
 - Follow React best practices and hooks
 - Maintain consistent error handling
 - Write comprehensive tests
 - Use meaningful variable and function names
 
-### Testing Guidelines 🧪
+### Testing Guidelines 
 - Write tests for all new features
 - Include both happy path and error scenarios
 - Test edge cases and validation
 - Maintain test isolation
 - Clean up test data after each test
 
-### Git Workflow 🔄
+### Git Workflow 
 - Use meaningful commit messages
 - Follow conventional commits format
 - Keep changes focused and atomic
 - Write descriptive PR descriptions
 
-## ⚠️ Error Handling
+##  Error Handling
 
 The application implements comprehensive error handling:
 
@@ -250,16 +264,16 @@ The application implements comprehensive error handling:
 - Network error handling
 - Concurrent operation management
 
-## 🔮 Future Enhancements
+##  Future Enhancements
 
-- [ ] Add authentication and authorization 🔐
-- [ ] Implement real-time updates using WebSocket 🔄
-- [ ] Add bulk operations for products 📦
-- [ ] Enhance search and filtering capabilities 🔍
-- [ ] Add image upload for products and categories 📸
-- [ ] Implement caching for better performance ⚡
+- [ ] Add authentication and authorization 
+- [ ] Implement real-time updates using WebSocket 
+- [ ] Add bulk operations for products 
+- [ ] Enhance search and filtering capabilities 
+- [ ] Add image upload for products and categories 
+- [ ] Implement caching for better performance 
 
-## 🤝 Contributing
+##  Contributing
 
 1. Fork the repository from [dabBaseReactDemo](https://github.com/vvidov/dabBaseReactDemo)
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
@@ -267,11 +281,11 @@ The application implements comprehensive error handling:
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request to the main repository
 
-## 📄 License
+##  License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-### System Architecture 🏗️
+### System Architecture 
 
 ```mermaid
 graph TB
@@ -293,7 +307,7 @@ graph TB
     Axios --> |Data| React
 ```
 
-### Data Flow 🔄
+### Data Flow 
 
 ```mermaid
 %%{init: {'theme': 'dark'}}%%
@@ -321,7 +335,7 @@ sequenceDiagram
     Note over R,D: All communication between containers<br/>happens within Docker network
 ```
 
-### Component Structure 🏢
+### Component Structure 
 
 ```mermaid
 graph TD
@@ -338,7 +352,7 @@ graph TD
     API --> Types
 ```
 
-### Database Schema 📊
+### Database Schema 
 
 ```mermaid
 erDiagram
@@ -356,4 +370,3 @@ erDiagram
         decimal UnitPrice
         int UnitsInStock
     }
-```
