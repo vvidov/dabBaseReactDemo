@@ -52,7 +52,24 @@ DAB Base ([repository](https://github.com/vvidov/DabRestGraphQLBaseDemo)) is the
   - Responsive design
   - Clean and intuitive interface
   - Real-time updates
-  - Error handling and user feedback
+
+## 📸 Screenshots
+
+### Categories View
+![Categories View](docs/images/categories-view.png)
+*Main view showing the list of categories with their details and actions*
+
+### Products View
+![Products View](docs/images/products-view.png)
+*Products list view when a category is selected*
+
+### Category Management
+![Category Dialog](docs/images/category-dialog.png)
+*Dialog for creating and editing categories*
+
+### Product Management
+![Product Dialog](docs/images/product-dialog.png)
+*Dialog for managing products within categories*
 
 ## 🛠️ Technical Stack
 
