@@ -1,0 +1,3 @@
+[submodule "dab-base"]
+	path = dab-base
+	url = https://github.com/vvidov/DabRestReactDemo.git
