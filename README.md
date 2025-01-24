@@ -56,20 +56,20 @@ DAB Base ([repository](https://github.com/vvidov/DabRestGraphQLBaseDemo)) is the
 ## 📸 Screenshots
 
 ### Categories View
+Shows the main categories list with options to manage categories and view their products.
 ![Categories View](docs/images/categories-view.png)
-*Main view showing the list of categories with their details and actions*
-
-### Products View
-![Products View](docs/images/products-view.png)
-*Products list view when a category is selected*
 
 ### Category Management
+Dialog for adding and editing categories with validation.
 ![Category Dialog](docs/images/category-dialog.png)
-*Dialog for creating and editing categories*
+
+### Products View
+Displays products within a selected category with management options.
+![Products View](docs/images/products-view.png)
 
 ### Product Management
+Dialog for adding and editing products with validation.
 ![Product Dialog](docs/images/product-dialog.png)
-*Dialog for managing products within categories*
 
 ## 🛠️ Technical Stack
 

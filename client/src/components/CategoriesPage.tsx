@@ -141,6 +141,7 @@ const CategoriesPage: React.FC = () => {
   };
 
   const handleViewProducts = async (category: Category) => {
+    setSelectedCategory(category); // Set the selected category
     setShowProducts(true);
     await fetchProducts(category.CategoryID);
   };
@@ -150,6 +151,10 @@ const CategoriesPage: React.FC = () => {
   };
 
   const handleAddProduct = () => {
+    if (!selectedCategory) {
+      setError('Please select a category first');
+      return;
+    }
     setSelectedProduct(null);
     setProductDialogOpen(true);
   };
@@ -197,6 +202,11 @@ const CategoriesPage: React.FC = () => {
   };
 
   const handleSaveProduct = async (productData: Partial<Product>) => {
+    if (!selectedCategory) {
+      setError('No category selected');
+      return;
+    }
+
     try {
       if (selectedProduct) {
         // For updates, only send changed fields
@@ -220,33 +230,29 @@ const CategoriesPage: React.FC = () => {
         // For new products
         const newProduct: Omit<Product, 'ProductID'> = {
           ProductName: productData.ProductName || '',
-          CategoryID: selectedCategory?.CategoryID as number,
+          CategoryID: selectedCategory.CategoryID,
           UnitPrice: productData.UnitPrice || 0,
           UnitsInStock: productData.UnitsInStock || 0
         };
         await api.createProduct(newProduct);
       }
-      
-      // Close the dialog
-      setProductDialogOpen(false);
-      
+
       // Refresh the products list
-      await fetchProducts(selectedCategory?.CategoryID as number);
+      await fetchProducts(selectedCategory.CategoryID);
       
-      // Update product counts
-      const products = await api.getProducts(selectedCategory?.CategoryID as number);
+      // Update product count
+      const products = await api.getProducts(selectedCategory.CategoryID);
       setCategoryProducts(prev => ({
         ...prev,
-        [selectedCategory?.CategoryID as number]: products.length
+        [selectedCategory.CategoryID]: products.length
       }));
-      
-      // Clear selected product
+
+      setProductDialogOpen(false);
       setSelectedProduct(null);
-      // Clear any error
       setError(null);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error saving product:', err);
-      setError('Failed to save product');
+      setError(err.message || 'Failed to save product');
     }
   };
 
@@ -365,13 +371,7 @@ const CategoriesPage: React.FC = () => {
       
       <CategoryHeader 
         onAddCategory={handleAddCategory}
-        onAddProduct={() => {
-          if (!selectedCategory) {
-            setError('Please select a category first');
-            return;
-          }
-          setProductDialogOpen(true);
-        }}
+        onAddProduct={handleAddProduct}
         showAddProduct={selectedCategory !== null}
       />
       
@@ -424,6 +424,17 @@ const CategoriesPage: React.FC = () => {
         category={selectedCategory}
         onClose={() => setCategoryDialogOpen(false)}
         onSave={handleSaveCategory}
+      />
+
+      {/* Add ProductDialog to main view */}
+      <ProductDialog
+        open={productDialogOpen}
+        product={selectedProduct}
+        onClose={() => {
+          setProductDialogOpen(false);
+          setSelectedProduct(null);
+        }}
+        onSave={handleSaveProduct}
       />
 
       {/* Confirmation Dialog */}
