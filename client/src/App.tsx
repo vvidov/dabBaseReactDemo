@@ -1,28 +1,28 @@
 import React from 'react';
-import { Container, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import CategoriesPage from './components/CategoriesPage';
+import { Container, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
+import ErrorBoundary from './components/ErrorBoundary';
+import { ToastProvider } from './components/Toast';
 
 const theme = createTheme({
   palette: {
     mode: 'light',
-    primary: {
-      main: '#1976d2',
-    },
-    secondary: {
-      main: '#dc004e',
-    },
   },
 });
 
-function App() {
+const App: React.FC = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Container maxWidth="lg" sx={{ mt: 4 }}>
-        <CategoriesPage />
-      </Container>
-    </ThemeProvider>
+    <ErrorBoundary>
+      <ThemeProvider theme={theme}>
+        <ToastProvider>
+          <CssBaseline />
+          <Container maxWidth="lg" sx={{ py: 4 }}>
+            <CategoriesPage />
+          </Container>
+        </ToastProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
   );
-}
+};
 
 export default App;

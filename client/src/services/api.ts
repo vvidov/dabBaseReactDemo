@@ -1,168 +1,163 @@
-import axios from 'axios';
-import type { Category, Product } from '../types';
+import axios, { AxiosError, AxiosInstance } from 'axios';
+import { Category, Product } from '../types';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/api';
+
+// Create axios instance with default config
+const axiosInstance: AxiosInstance = axios.create({
+  baseURL: API_URL,
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+// Add request interceptor
+axiosInstance.interceptors.request.use(
+  (config) => {
+    // Add any auth headers or other common headers here
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Add response interceptor
+axiosInstance.interceptors.response.use(
+  (response) => {
+    // Transform response data if needed
+    return response;
+  },
+  (error: AxiosError) => {
+    // Handle common error cases
+    if (error.response?.status === 404) {
+      console.error('Resource not found:', error.config?.url);
+    } else if (error.response?.status === 401) {
+      console.error('Unauthorized access');
+    } else if (error.response?.status === 500) {
+      console.error('Server error:', error.response?.data);
+    }
+    return Promise.reject(error);
+  }
+);
+
+// Helper function to handle API errors
+const handleApiError = (error: any, context: string) => {
+  console.error(`Error in ${context}:`, error);
+  if (error.response) {
+    console.error('Response status:', error.response.status);
+    console.error('Response data:', error.response.data);
+  }
+  throw error;
+};
 
 // Categories API
 export const getCategories = async (): Promise<Category[]> => {
   try {
     console.log('Fetching categories from:', `${API_URL}/categories`);
-    const response = await axios.get<{ value: Category[] }>(`${API_URL}/categories`);
-    console.log('Categories response:', response.data);
+    const response = await axiosInstance.get<{ value: Category[] }>('/categories');
     return response.data.value;
   } catch (error: any) {
-    console.error('Error fetching categories:', error);
-    if (error.response) {
-      console.error('Response status:', error.response.status);
-      console.error('Response data:', error.response.data);
-    }
-    throw error;
+    return handleApiError(error, 'getCategories');
   }
 };
 
 export const createCategory = async (category: Omit<Category, 'CategoryID'>): Promise<Category> => {
   try {
-    const payload = {
-      ...category,
-      Picture: null // Always include Picture field, set to null if not provided
-    };
-    console.log('Creating category:', payload);
-    const response = await axios.post<{ value: Category[] }>(`${API_URL}/categories`, payload);
-    console.log('Create response:', response.data);
+    console.log('Creating category:', category);
+    const response = await axiosInstance.post<{ value: Category[] }>('/categories', category);
     return response.data.value[0];
   } catch (error: any) {
-    console.error('Error creating category:', error);
-    if (error.response) {
-      console.error('Response status:', error.response.status);
-      console.error('Response data:', error.response.data);
-    }
-    throw error;
+    return handleApiError(error, 'createCategory');
   }
 };
 
-export const updateCategory = async (categoryId: number, category: Partial<Omit<Category, 'CategoryID'>>): Promise<Category> => {
+export const updateCategory = async (
+  categoryId: number,
+  category: Partial<Omit<Category, 'CategoryID'>>
+): Promise<Category> => {
   try {
     console.log('Updating category:', categoryId, category);
     const payload = {
       ...category,
       Picture: null // Always include Picture field, set to null if not provided
     };
-    const response = await axios.patch<{ value: Category[] }>(`${API_URL}/categories/CategoryID/${categoryId}`, payload);
-    console.log('Update response:', response.data);
+    const response = await axiosInstance.patch<{ value: Category[] }>(
+      `/categories/CategoryID/${categoryId}`,
+      payload
+    );
     return response.data.value[0];
   } catch (error: any) {
-    console.error('Error updating category:', error);
-    if (error.response) {
-      console.error('Response status:', error.response.status);
-      console.error('Response data:', error.response.data);
-    }
-    throw error;
+    return handleApiError(error, 'updateCategory');
   }
 };
 
 export const deleteCategory = async (categoryId: number): Promise<void> => {
   try {
     console.log('Deleting category with ID:', categoryId);
-    await axios.delete(`${API_URL}/categories/CategoryID/${categoryId}`);
+    await axiosInstance.delete(`/categories/CategoryID/${categoryId}`);
     console.log('Delete successful');
   } catch (error: any) {
-    console.error('Error deleting category:', error);
-    if (error.response) {
-      console.error('Response status:', error.response.status);
-      console.error('Response data:', error.response.data);
-    }
-    throw error;
+    return handleApiError(error, 'deleteCategory');
   }
 };
 
 // Products API
 export const getProducts = async (categoryId: number): Promise<Product[]> => {
   try {
-    const response = await axios.get(`${API_URL}/products?$filter=CategoryID eq ${categoryId}`);
-    console.log('Raw Products API Response:', response);
+    const response = await axiosInstance.get<{ value: Product[] }>(
+      `/products?$filter=CategoryID eq ${categoryId}`
+    );
     
-    // Check if response.data is already an array
     if (Array.isArray(response.data)) {
       return response.data;
     }
     
-    // Check if response.data has a value property that's an array
-    if (response.data && Array.isArray(response.data.value)) {
+    if (response.data?.value) {
       return response.data.value;
     }
     
     console.error('Unexpected products response format:', response.data);
     return [];
-  } catch (error) {
-    console.error('Error fetching products:', error);
-    return [];
+  } catch (error: any) {
+    return handleApiError(error, 'getProducts');
   }
 };
 
 export const createProduct = async (product: Omit<Product, 'ProductID'>): Promise<Product> => {
   try {
-    const payload = {
-      ...product
-    };
-    console.log('Creating product with payload:', payload);
-    const response = await axios.post<{ value: Product[] }>(`${API_URL}/products`, payload);
-    console.log('Create product response:', response.data);
+    const response = await axiosInstance.post<{ value: Product[] }>('/products', product);
     return response.data.value[0];
   } catch (error: any) {
-    console.error('Error creating product:', error);
-    if (error.response) {
-      console.error('Response status:', error.response.status);
-      console.error('Response data:', error.response.data);
-    }
-    throw error;
+    return handleApiError(error, 'createProduct');
   }
 };
 
-export const updateProduct = async (productId: number, product: Partial<Product>): Promise<Product> => {
+export const updateProduct = async (
+  productId: number,
+  product: Partial<Product>
+): Promise<Product> => {
   try {
     // Remove any undefined values from the payload
     const cleanProduct = Object.fromEntries(
       Object.entries(product).filter(([_, v]) => v !== undefined)
     );
     
-    const payload = {
-      ...cleanProduct
-    };
-    
-    console.log('Updating product with payload:', payload);
-    const response = await axios.patch<{ value: Product[] }>(`${API_URL}/products/ProductID/${productId}`, payload);
-    console.log('Update product response:', response.data);
+    const response = await axiosInstance.patch<{ value: Product[] }>(
+      `/products/ProductID/${productId}`,
+      cleanProduct
+    );
     return response.data.value[0];
   } catch (error: any) {
-    console.error('Error updating product:', error);
-    if (error.response) {
-      console.error('Response status:', error.response.status);
-      console.error('Response data:', error.response.data);
-    }
-    throw error;
+    return handleApiError(error, 'updateProduct');
   }
 };
 
 export const deleteProduct = async (productId: number): Promise<void> => {
   try {
-    console.log('Deleting product with ID:', productId);
-    const response = await axios.delete(`${API_URL}/products/ProductID/${productId}`, {
-      data: { ProductID: productId }
-    });
-    console.log('Delete Product API Response:', response.status);
-    // 204 means success with no content
-    if (response.status !== 204) {
-      throw new Error('Unexpected response from server');
-    }
+    await axiosInstance.delete(`/products/ProductID/${productId}`);
   } catch (error: any) {
-    console.error('Error deleting product:', error);
-    if (error.response) {
-      console.error('Response status:', error.response.status);
-      console.error('Response data:', error.response.data);
-      if (error.response.status === 400) {
-        throw new Error('Invalid product ID or product not found');
-      }
-    }
-    throw error;
+    return handleApiError(error, 'deleteProduct');
   }
 };
