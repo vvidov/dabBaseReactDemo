@@ -128,7 +128,6 @@ const CategoriesPage: React.FC = () => {
         const newCategory: Omit<Category, 'CategoryID'> = {
           CategoryName: categoryData.CategoryName || '',
           Description: categoryData.Description || '',
-          Picture: null
         };
         await api.createCategory(newCategory);
       }

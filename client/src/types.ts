@@ -2,7 +2,6 @@ export interface Category {
     CategoryID: number;
     CategoryName: string;
     Description: string;
-    Picture: string | null;
 }
 
 export interface Product {

@@ -55,8 +55,8 @@ const handleApiError = (error: any, context: string) => {
 // Categories API
 export const getCategories = async (): Promise<Category[]> => {
   try {
-    console.log('Fetching categories from:', `${API_URL}/categories`);
-    const response = await axiosInstance.get<{ value: Category[] }>('/categories');
+    console.log('Fetching categories from:', `${API_URL}/categories?$select=CategoryID,CategoryName,Description`);
+    const response = await axiosInstance.get<{ value: Category[] }>('/categories?$select=CategoryID,CategoryName,Description');
     return response.data.value;
   } catch (error: any) {
     return handleApiError(error, 'getCategories');
