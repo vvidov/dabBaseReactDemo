@@ -81,13 +81,23 @@ export const updateCategory = async (
     console.log('Updating category:', categoryId, category);
     const payload = {
       ...category,
-      Picture: null // Always include Picture field, set to null if not provided
     };
     const response = await axiosInstance.patch<{ value: Category[] }>(
-      `/categories/CategoryID/${categoryId}`,
+      `/categories/CategoryID/${categoryId}?$select=CategoryID,CategoryName,Description`,
       payload
     );
-    return response.data.value[0];
+    
+    if (!response.data) {
+      throw new Error('No data received from update operation');
+    }
+    
+    // Handle both array and {value: array} response formats
+    const categories = Array.isArray(response.data) ? response.data : response.data.value;
+    if (!categories || categories.length === 0) {
+      throw new Error('No category data in response');
+    }
+    
+    return categories[0];
   } catch (error: any) {
     return handleApiError(error, 'updateCategory');
   }

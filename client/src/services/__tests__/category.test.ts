@@ -88,14 +88,12 @@ describe('Category API Integration Tests', () => {
     expect(result.CategoryID).toBe(createdCategoryId);
     expect(result.CategoryName).toBe(updateData.CategoryName);
     expect(result.Description).toBe(updateData.Description);
-    expect(result.Picture).toBe(updateData.Picture);
 
     // Verify the update
     const categories = await api.getCategories();
     const foundCategory = categories.find(c => c.CategoryID === createdCategoryId);
     expect(foundCategory?.CategoryName).toBe(updateData.CategoryName);
     expect(foundCategory?.Description).toBe(updateData.Description);
-    expect(foundCategory?.Picture).toBe(updateData.Picture);
   });
 
   it('should delete the category', async () => {

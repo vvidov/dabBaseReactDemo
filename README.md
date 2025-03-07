@@ -171,7 +171,6 @@ erDiagram
         int CategoryID PK
         string CategoryName
         string Description
-        byte[] Picture
     }
     Products {
         int ProductID PK
@@ -199,6 +198,45 @@ client/
 ```
 
 ## 📝 API Endpoints
+
+### Categories API
+
+#### Get Categories
+```typescript
+// Optimized endpoint that returns only essential fields
+GET /api/categories?$select=CategoryID,CategoryName,Description
+
+// Response Type
+interface Category {
+    CategoryID: number;
+    CategoryName: string;
+    Description: string;
+}
+
+// Usage Example
+const categories = await api.getCategories();
+```
+
+This endpoint is optimized to return only the essential category fields, reducing payload size and improving performance. The response excludes the `Picture` field which is not used in the main UI.
+
+**Benefits:**
+- Smaller payload size (no binary Picture data)
+- Faster network transfer
+- Reduced memory usage
+- Better mobile performance
+
+**Example Response:**
+```json
+{
+  "value": [
+    {
+      "CategoryID": 1,
+      "CategoryName": "Beverages",
+      "Description": "Soft drinks, coffees, teas, beers, and ales"
+    }
+  ]
+}
+```
 
 ### Categories
 - `GET /api/categories` - List all categories

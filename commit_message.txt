@@ -1,0 +1,6 @@
+fix(api): Enhance updateCategory with field selection and robust response handling
+
+- Add $select parameter to updateCategory endpoint for optimized payload
+- Improve response handling for different API formats
+- Follow consistent field selection pattern across category endpoints
+- Add better error messages for debugging
